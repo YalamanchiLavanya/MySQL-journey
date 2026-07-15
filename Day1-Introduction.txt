@@ -3,7 +3,7 @@ Full Stack Developer
 Full stack-->Frontend+ Backend
 
 
-Frontend
+Frontend 
 =========
 -->Frontend is a visual and interactive layer of a website or application that users 
 directly see and interact with through a webserver or mobile app
