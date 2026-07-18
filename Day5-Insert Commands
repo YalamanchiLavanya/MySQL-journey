@@ -1,0 +1,405 @@
+DML
+----
+1.Insert
+-------------
+Syntax:
+----------
+INSERT INTO TABLE NAME(COLUMN NAMES)VALUES(VALUES);
+
+2.UPDATE
+--------
+SYNTAX:
+
+----------
+UPDATE TABLE-NAME SET COLUMN NAME=UPDATE-VALUE WHERE SOME CONDITION;
+
+3.DELETE
+---------
+SYNTAX:
+---------
+DELETE FROM EMPLOYEES WHERE SOME CONDITION;
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| psf4               |
+| sys                |
++--------------------+
+
+mysql> show tables;
+ERROR 1046 (3D000): No database selected
+mysql> use psf4;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_psf4 |
++----------------+
+| company_staff  |
+| employee       |
++----------------+
+
+mysql> desc employee;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Empid     | char(5)     | YES  |     | NULL    |       |
+| FIRSTNAME | varchar(30) | YES  |     | NULL    |       |
+| LASTNAME  | varchar(50) | YES  |     | NULL    |       |
+| age       | int         | YES  |     | NULL    |       |
+| doj       | date        | YES  |     | NULL    |       |
+| address   | tinytext    | YES  |     | NULL    |       |
+| dept      | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE(EMPID,FIRSTNAME,LASTNAME,AGE,DOJ,ADDRESS,DEPT)VALUES
+    -> 
+    -> ('E001','YALAMNCHI','LAVANYA','22','2026-06-17','SRIKAKULAM','PYTHON');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+------------+--------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address    | dept   |
++-------+-----------+----------+------+------------+------------+--------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM | PYTHON |
++-------+-----------+----------+------+------------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE(EMPID,FIRSTNAME,LASTNAME,AGE,DOJ,ADDRESS,DEPT)VALUES
+    -> ('E001','YALAMNCHI','LIKHITHA','20','2026-06-20','VIZAG','JAVA');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+------------+--------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address    | dept   |
++-------+-----------+----------+------+------------+------------+--------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM | PYTHON |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG      | JAVA   |
++-------+-----------+----------+------+------------+------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE(EMPID,FIRSTNAME,LASTNAME,AGE,DOJ,ADDRESS,DEPT)VALUES
+    -> ('E001','YALAMNCHI','LIKHITHA','20','2026-06-20','VIZAG','JAVA');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> INSERT INTO EMPLOYEE(EMPID,FIRSTNAME,LASTNAME,AGE,DOJ,ADDRESS,DEPT)VALUES
+    -> ('E003','LOHITHA','SAI','20','2026-06-29','VIZAG','JAVA'),
+    -> ('E004','REDDY','REVANTH',23,'2025-05-24','VIZIYANAGARAM','EE');
+Query OK, 2 rows affected (0.09 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept   |
++-------+-----------+----------+------+------------+---------------+--------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA   |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA   |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA   |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE     |
++-------+-----------+----------+------+------------+---------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE(FIRSTNAME,DOJ,AGE,ADDRESS,LASTNAME,EMPID,DEPT)VALUES
+    -> ('VINAY','2018-08-12',21,'VIZAG','KUMAR','E005','EEE');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept   |
++-------+-----------+----------+------+------------+---------------+--------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA   |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA   |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA   |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE     |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | EEE    |
++-------+-----------+----------+------+------------+---------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE VALUES
+    -> ('E006','MANOJ','KUMAR',24,'2020-10-9','PALASA','FULLSTACK');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+-----------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept      |
++-------+-----------+----------+------+------------+---------------+-----------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON    |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA      |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA      |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA      |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE        |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | EEE       |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK |
++-------+-----------+----------+------+------------+---------------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE VALUES
+    -> ('E007','GOWTHAMI','KUMARI',24,'2023-10-9','HYD','HR'),
+    -> ('E008','MEENA','KUMARI',29,'2013-12-9','MUMBAI','ADMIN');
+Query OK, 2 rows affected (0.05 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+-----------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept      |
++-------+-----------+----------+------+------------+---------------+-----------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON    |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA      |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA      |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA      |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE        |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | EEE       |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK |
+| E007  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR        |
+| E008  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN     |
++-------+-----------+----------+------+------------+---------------+-----------+
+mysql> INSERT INTO EMPLOYEE(EMPID,FIRSTNAME,DOJ,DEPT)
+    -> VALUES
+    -> ('EOO9','KAVYA','2019-8-23','SALES');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+-----------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept      |
++-------+-----------+----------+------+------------+---------------+-----------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON    |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA      |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA      |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA      |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE        |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | EEE       |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK |
+| E007  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR        |
+| E008  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN     |
+| EOO9  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES     |
++-------+-----------+----------+------+------------+---------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE
+    -> SET
+    -> EMPID='E010',
+    -> FIRSTNAME='SUDHEER',
+    -> LASTNAME='KUMAR',
+    -> AGE=54,
+    -> DOJ='2010-09-10',
+    -> ADDRESS='TEKKALI',
+    -> DEPT='DATA SCIENCE';
+Query OK, 1 row affected (0.05 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept         |
++-------+-----------+----------+------+------------+---------------+--------------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON       |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA         |
+| E001  | YALAMNCHI | LIKHITHA |   20 | 2026-06-20 | VIZAG         | JAVA         |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA         |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE           |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | EEE          |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK    |
+| E007  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR           |
+| E008  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN        |
+| EOO9  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES        |
+| E010  | SUDHEER   | KUMAR    |   54 | 2010-09-10 | TEKKALI       | DATA SCIENCE |
++-------+-----------+----------+------+------------+---------------+--------------+
+mysql> UPDATE EMPLOYEE SET LASTNAME='LAYA' WHERE DOJ='2026-06-20';
+Query OK, 2 rows affected (0.05 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE WHERE DOJ='2026-06-20';
++-------+-----------+----------+------+------------+---------+------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address | dept |
++-------+-----------+----------+------+------------+---------+------+
+| E001  | YALAMNCHI | LAYA     |   20 | 2026-06-20 | VIZAG   | JAVA |
+| E001  | YALAMNCHI | LAYA     |   20 | 2026-06-20 | VIZAG   | JAVA |
++-------+-----------+----------+------+------------+---------+------+
+mysql> UPDATE EMPLOYEE SET LASTNAME='LAYA',FIRSTNAME='REDDY',AGE=24 WHERE DOJ='2026-06-20';
+Query OK, 2 rows affected (0.06 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE WHERE DOJ='2026-06-20';
++-------+-----------+----------+------+------------+---------+------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address | dept |
++-------+-----------+----------+------+------------+---------+------+
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG   | JAVA |
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG   | JAVA |
++-------+-----------+----------+------+------------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept         |
++-------+-----------+----------+------+------------+---------------+--------------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON       |
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG         | JAVA         |
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG         | JAVA         |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA         |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE           |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | EEE          |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK    |
+| E007  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR           |
+| E008  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN        |
+| EOO9  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES        |
+| E010  | SUDHEER   | KUMAR    |   54 | 2010-09-10 | TEKKALI       | DATA SCIENCE |
++-------+-----------+----------+------+------------+---------------+--------------+
+11 rows in set (0.00 sec)
+
+
+mysql> UPDATE EMPLOYEE SET DEPT='JAVA' WHERE DEPT='QA';
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET DEPT='PYTHON' WHERE DEPT='DEVOPS';
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET DEPT='FINANCE' WHERE DEPT='EEE';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept         |
++-------+-----------+----------+------+------------+---------------+--------------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON       |
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG         | JAVA         |
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG         | JAVA         |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | JAVA         |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE           |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | FINANCE      |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK    |
+| E007  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR           |
+| E008  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN        |
+| EOO9  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES        |
+| E010  | SUDHEER   | KUMAR    |   54 | 2010-09-10 | TEKKALI       | DATA SCIENCE |
++-------+-----------+----------+------+------------+---------------+--------------+
+11 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEE SET DEPT='QA' WHERE DEPT='JAVA';
+Query OK, 3 rows affected (0.05 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept         |
++-------+-----------+----------+------+------------+---------------+--------------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON       |
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG         | QA           |
+| E001  | REDDY     | LAYA     |   24 | 2026-06-20 | VIZAG         | QA           |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | QA           |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE           |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | FINANCE      |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK    |
+| E007  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR           |
+| E008  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN        |
+| EOO9  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES        |
+| E010  | SUDHEER   | KUMAR    |   54 | 2010-09-10 | TEKKALI       | DATA SCIENCE |
++-------+-----------+----------+------+------------+---------------+--------------+
+11 rows in set (0.00 sec)
+
+mysql> DELETE FROM EMPLOYEE WHERE LASTNAME='LAYA';
+Query OK, 2 rows affected (0.01 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept         |
++-------+-----------+----------+------+------------+---------------+--------------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON       |
+| E003  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | QA           |
+| E004  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE           |
+| E005  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | FINANCE      |
+| E006  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK    |
+| E007  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR           |
+| E008  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN        |
+| EOO9  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES        |
+| E010  | SUDHEER   | KUMAR    |   54 | 2010-09-10 | TEKKALI       | DATA SCIENCE |
++-------+-----------+----------+------+------------+---------------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEE SET EMPID='E002' WHERE EMPID='E003';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET EMPID='E003' WHERE EMPID='E004';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET EMPID='E004' WHERE EMPID='E005';
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET EMPID='E005' WHERE EMPID='E006';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET EMPID='E006' WHERE EMPID='E007';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET EMPID='E007' WHERE EMPID='E008';
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET EMPID='E008' WHERE EMPID='E009';
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET EMPID='E009' WHERE EMPID='E010';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept         |
++-------+-----------+----------+------+------------+---------------+--------------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON       |
+| E002  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | QA           |
+| E003  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE           |
+| E004  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | FINANCE      |
+| E005  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK    |
+| E006  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR           |
+| E007  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN        |
+| EOO9  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES        |
+| E009  | SUDHEER   | KUMAR    |   54 | 2010-09-10 | TEKKALI       | DATA SCIENCE |
++-------+-----------+----------+------+------------+---------------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEE SET EMPID='E008' WHERE FIRSTNAME='KAVYA;
+    '> ^C
+mysql> UPDATE EMPLOYEE SET EMPID='E008' WHERE FIRSTNAME='KAVYA';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEE;
++-------+-----------+----------+------+------------+---------------+--------------+
+| Empid | FIRSTNAME | LASTNAME | age  | doj        | address       | dept         |
++-------+-----------+----------+------+------------+---------------+--------------+
+| E001  | YALAMNCHI | LAVANYA  |   22 | 2026-06-17 | SRIKAKULAM    | PYTHON       |
+| E002  | LOHITHA   | SAI      |   20 | 2026-06-29 | VIZAG         | QA           |
+| E003  | REDDY     | REVANTH  |   23 | 2025-05-24 | VIZIYANAGARAM | EE           |
+| E004  | VINAY     | KUMAR    |   21 | 2018-08-12 | VIZAG         | FINANCE      |
+| E005  | MANOJ     | KUMAR    |   24 | 2020-10-09 | PALASA        | FULLSTACK    |
+| E006  | GOWTHAMI  | KUMARI   |   24 | 2023-10-09 | HYD           | HR           |
+| E007  | MEENA     | KUMARI   |   29 | 2013-12-09 | MUMBAI        | ADMIN        |
+| E008  | KAVYA     | NULL     | NULL | 2019-08-23 | NULL          | SALES        |
+| E009  | SUDHEER   | KUMAR    |   54 | 2010-09-10 | TEKKALI       | DATA SCIENCE |
++-------+-----------+----------+------+------------+---------------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> TRUNCATE TABLE EMPLOYEE;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
+Empty set (0.00 sec)
+
+mysql> DROP TABLE EMPLOYEE;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> SELECT*FROM EMPLOYEE;
+ERROR 1146 (42S02): Table 'psf4.employee' doesn't exist
