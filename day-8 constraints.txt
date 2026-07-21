@@ -1,0 +1,197 @@
+CONSTRAINTS
+-----------
+constraints are rules applied to the table columns in MySQL  to ensure that only valid and accurate data os 
+stored in the database.
+
+in simple words:
+Constraints = Rules that control the data entered into a table.
+
+============================
+Why do we use Constraints
+-------------------------
+1.Maintain data integrity
+2.prevent invalid data entry.
+3.Avoid duplicate records.
+4.ensure relationships between tables.
+5. make the database reliable and consistent.
+
+=======================
+Constraints
+----------
+1.Not Null:-It Doesn't allow null values (duplicates are allowed, but null is not allowed)
+2.unique:- does not allow duplicate values(duplicate null values are allowed , but duplicates are not allowed )
+3.Primary Key:- It is combination of both  not null + unique (Not null  and duplicates both are not allowed)
+4.Composite key:-can apply more than 2 primary key  and apply composite key
+
+5.Foreign key:- (foreign key lo untey child table)
+-->A foreign key is a key used to link 2 tables together .
+-->A foreign key is a field or collection of fields in one table that refers to the primary key in another table.
+-->the table  containing the foreign key is called the child table an d the table containing the candidate key 
+is called the  referenced table or parent table
+
+6.check:- checks condition before execution
+7.default:-Default values are taken
+
+===========================================
+WHAT ARE REFERENTIAL ACTIONS
+----------------------------
+Referential Actions defines what happens to child table data when parent table data is deleted or updated.
+
+1.On Delete Cascade
+(parent table lo delete cheste child lo kuda avvuatdhi)
+
+2.On Update Cascade
+(parent table lo update cheste child lo kuda avvuatdhi)
+
+3.On Delete Set Null;
+(parent table delete  cheste child table delete avvakunda null ani vasatdhi)
+
+4.On Update Set Null;
+(parent table update  cheste child table update avvakunda null ani vasatdhi)
+
+=================================================================================
+OPERATORS
+-----------
+
+https://github.com/mallikharjuna2000/mysqlqueries
+
+
+mysql> use pfs4;
+Database changed
+mysql> CREATE TABLE Products (
+    ->  id INT,
+    ->  name VARCHAR(100),
+    ->  price DECIMAL(10,2),
+    ->  qty INT
+    ->  );
+Query OK, 0 rows affected (0.04 sec)
+mysql> INSERT INTO Products VALUES
+    ->  (1, 'Pen', 10.00, 100),
+    ->  (2, 'Notebook', 25.00, 50),
+    ->  (3, 'Pencil', 5.00, 200),
+    ->  (4, 'Eraser', 3.00, 300),
+    ->  (5, 'Marker', 15.00, 80),
+    ->  (6, 'Scale', 20.00, 150),
+    ->  (7, 'Sharpener', 8.00, 120),
+    ->  (8, 'Geometry Box', 120.00, 40),
+    ->  (9, 'Sketch Pen', 60.00, 75),
+    ->  (10, 'Crayons', 90.00, 55);
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select*from products;
++------+--------------+--------+------+
+| id   | name         | price  | qty  |
++------+--------------+--------+------+
+|    1 | Pen          |  10.00 |  100 |
+|    2 | Notebook     |  25.00 |   50 |
+|    3 | Pencil       |   5.00 |  200 |
+|    4 | Eraser       |   3.00 |  300 |
+|    5 | Marker       |  15.00 |   80 |
+|    6 | Scale        |  20.00 |  150 |
+|    7 | Sharpener    |   8.00 |  120 |
+|    8 | Geometry Box | 120.00 |   40 |
+|    9 | Sketch Pen   |  60.00 |   75 |
+|   10 | Crayons      |  90.00 |   55 |
++------+--------------+--------+------+
+10 rows in set (0.00 sec)
+
+calculate total value of each product adding tax of 12 percent
+
+
+mysql> select name,price,price+(price*0.12)as price_with_tax from products;
++--------------+--------+----------------+
+| name         | price  | price_with_tax |
++--------------+--------+----------------+
+| Pen          |  10.00 |        11.2000 |
+| Notebook     |  25.00 |        28.0000 |
+| Pencil       |   5.00 |         5.6000 |
+| Eraser       |   3.00 |         3.3600 |
+| Marker       |  15.00 |        16.8000 |
+| Scale        |  20.00 |        22.4000 |
+| Sharpener    |   8.00 |         8.9600 |
+| Geometry Box | 120.00 |       134.4000 |
+| Sketch Pen   |  60.00 |        67.2000 |
+| Crayons      |  90.00 |       100.8000 |
++--------------+--------+----------------+
+10 rows in set (0.00 sec)
+
+2. Calculate discounted price  by subtracting price with 5 rs
+
+
+mysql> select name,price,(price-0.5) as price_with_discount from products;
++--------------+--------+---------------------+
+| name         | price  | price_with_discount |
++--------------+--------+---------------------+
+| Pen          |  10.00 |                9.50 |
+| Notebook     |  25.00 |               24.50 |
+| Pencil       |   5.00 |                4.50 |
+| Eraser       |   3.00 |                2.50 |
+| Marker       |  15.00 |               14.50 |
+| Scale        |  20.00 |               19.50 |
+| Sharpener    |   8.00 |                7.50 |
+| Geometry Box | 120.00 |              119.50 |
+| Sketch Pen   |  60.00 |               59.50 |
+| Crayons      |  90.00 |               89.50 |
++--------------+--------+---------------------+
+10 rows in set (0.00 sec)
+
+3. Total inventory value for each product (multiplication of price and tax)
+
+mysql> select name,price,(price*0.12)as price_with_tax from products;
++--------------+--------+----------------+
+| name         | price  | price_with_tax |
++--------------+--------+----------------+
+| Pen          |  10.00 |         1.2000 |
+| Notebook     |  25.00 |         3.0000 |
+| Pencil       |   5.00 |         0.6000 |
+| Eraser       |   3.00 |         0.3600 |
+| Marker       |  15.00 |         1.8000 |
+| Scale        |  20.00 |         2.4000 |
+| Sharpener    |   8.00 |         0.9600 |
+| Geometry Box | 120.00 |        14.4000 |
+| Sketch Pen   |  60.00 |         7.2000 |
+| Crayons      |  90.00 |        10.8000 |
++--------------+--------+----------------+
+10 rows in set (0.00 sec)
+
+4. Calculate price per 10 units
+
+
+mysql> select name,price,(price*10) as price_for_10_units from products;
++--------------+--------+--------------------+
+| name         | price  | price_for_10_units |
++--------------+--------+--------------------+
+| Pen          |  10.00 |             100.00 |
+| Notebook     |  25.00 |             250.00 |
+| Pencil       |   5.00 |              50.00 |
+| Eraser       |   3.00 |              30.00 |
+| Marker       |  15.00 |             150.00 |
+| Scale        |  20.00 |             200.00 |
+| Sharpener    |   8.00 |              80.00 |
+| Geometry Box | 120.00 |            1200.00 |
+| Sketch Pen   |  60.00 |             600.00 |
+| Crayons      |  90.00 |             900.00 |
++--------------+--------+--------------------+
+10 rows in set (0.00 sec)
+
+
+5.find product where quantity is not a multiple of 50
+
+
+mysql> select name,price,(price%50) as multiples_50 from products;
++--------------+--------+--------------+
+| name         | price  | multiples_50 |
++--------------+--------+--------------+
+| Pen          |  10.00 |        10.00 |
+| Notebook     |  25.00 |        25.00 |
+| Pencil       |   5.00 |         5.00 |
+| Eraser       |   3.00 |         3.00 |
+| Marker       |  15.00 |        15.00 |
+| Scale        |  20.00 |        20.00 |
+| Sharpener    |   8.00 |         8.00 |
+| Geometry Box | 120.00 |        20.00 |
+| Sketch Pen   |  60.00 |        10.00 |
+| Crayons      |  90.00 |        40.00 |
++--------------+--------+--------------+
+10 rows in set (0.01 sec)
