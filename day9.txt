@@ -1,0 +1,10 @@
+
+1.calculate total value of each product adding tax of 12 percent
+mysql> select name,price,price+(price*0.12)as price_with_tax from products;
+
+2. Calculate discounted price  by subtracting price with 5 rs
+mysql> select name,price,(price-5) as Discounted_price from products;
+
+3. Total inventory value for each product (multiplication of price and tax)
+mysql> select name,price,(price*qty) as  TOTAL_INVENTORY_VALUE from products;
+
