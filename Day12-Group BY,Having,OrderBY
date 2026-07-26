@@ -1,0 +1,377 @@
+ CREATE TABLE sales (
+    ->    sale_id INT PRIMARY KEY,
+    ->    product VARCHAR(50),
+    ->    category VARCHAR(50),
+    ->    units_sold INT,
+    ->    unit_price INT,
+    ->    region VARCHAR(50)
+    -> );
+mysql>
+mysql> INSERT INTO sales (sale_id, product, category, units_sold, unit_price, region) VALUES
+    -> (1,  'Keyboard',    'Electronics', 10, 1200,  'North'),
+    -> (2,  'Monitor',     'Electronics', 5,  7000,  'South'),
+    -> (3,  'Chair',       'Furniture',   15, 2500,  'North'),
+    -> (4,  'Desk',        'Furniture',   7,  4500,  'West'),
+    -> (5,  'Mouse',       'Electronics', 20, 800,   'East'),
+    -> (6,  'Sofa',        'Furniture',   3,  15000, 'South'),
+    -> (7,  'Headphones',  'Electronics', 8,  1800,  'North'),
+    -> (8,  'Laptop',      'Electronics', 6,  55000, 'West'),
+    -> (9,  'Table',       'Furniture',   12, 6000,  'East'),
+    -> (10, 'Fan',         'HomeAppliance', 18, 3000, 'South'),
+    -> (11, 'AC',          'HomeAppliance', 4, 35000, 'North'),
+    -> (12, 'Cupboard',    'Furniture',   5, 12000, 'West'),
+    -> (13, 'Printer',     'Electronics', 9, 9000,  'East'),
+    -> (14, 'Bed',         'Furniture',   2, 25000, 'South'),
+    -> (15, 'Mobile',      'Electronics', 14, 20000, 'North');
+
+
+
+GROUP BY HAVING
+---------------
+
+** Total units sold per category where total units >20
+--------------------------------------------------------
+select category,sum(units_sold)as total_units
+from sales
+group by category
+having total_units>20;
+
+**Total revenue per region where revenue >50000
+------------------------------------------------
+select region,sum(units_sold*unit_price)as revenue
+from sales
+group by region
+having revenue>50000;
+
+** Count of products per category with more than 2 products
+-----------------------------------------------------------
+select category,count(product) as product_count
+from sales
+group by category
+having product_count>2;
+
+** Average units price per category <5000
+-----------------------------------------------
+select category
+AVG(unit_price) as avg_price
+FROM sales
+GROUP BY category
+HAVING AVG(unit_price)<5000;
+
+** Regions with more than 1 electronics products
+--------------------------------------------------
+select region,count(product)as electronics_count
+from sales
+where category='electronics'
+group by region
+having electronics_count>1;
+
+
+
+GROPU BY ORDER BY
+-------------------
+
+** Category and total units sold ,ordered descending
+------------------------------------------------------
+select category,sum(units_sold) as total_units
+from sales
+group by category
+order by total_units desc;
+
+** Average unit price per region,ordered alphabetically
+---------------------------------------------------------
+select region,avg(unit_price)as avg_price
+from sales
+group by region
+order by region asc;
+
+** Total revenue per category ,highest first
+----------------------------------------------
+select category,
+sum(units_sold*unit_price) as revenue
+from sales
+group by category
+order by revenue desc;
+ 
+** Count of products in each region,descedning
+-------------------------------------------------
+select region,
+count(product) as product_count from sales
+group by region
+order by product_count desc;
+
+** Regions and total units sold,sorted by region
+--------------------------------------------------
+select region ,sum(units_sold) as total_units
+from sales
+group by region
+order by region;
+
+GROUP BY-HAVING-ORDERED BY
+
+** Total revenue per region >20000,order by revenue descending
+---------------------------------------------------------------
+select region,
+sum(units_sold*unit_price)as revenue
+from sales
+group by region
+having revenue>20000
+order by revenue desc;
+
+** Total units sold per category>10,order by category
+-------------------------------------------------------
+select category,
+sum(units_sold)as total_units
+from sales
+group by category
+having total_units>10
+order by category;
+
+** Count of products per region>1,order alphabetically
+-------------------------------------------------------
+slect region,
+count(product) as product_count
+from sales
+group by region
+having product_count>1
+order by region;
+
+** Categories Where avg price <6000,order by avg price
+-------------------------------------------------------
+select category,
+avg(unit_price)as avg_price
+from sales
+group by category
+having avg_price<6000
+order by avg_price;
+
+** Avg units sold per category>5,order by average descending
+--------------------------------------------------------------
+
+select category,
+avg(units_sold) as avg_units
+from sales
+group by category
+having avg_price<6000
+order by avg_units desc;
+
+
+Question 1
+
+Display the total units sold  for each region considering only electronics products.
+show only regions where total units sold are greater then 15 and display the
+results in descending
+
+ans
+---
+select region,
+sum(units_sold) as total_units
+from sales
+where category="electronics"
+group by region
+having total_units>15
+order by total_units desc;
+
+
+
+Question 2
+
+Display the total revenue generated by each category considering only products unit price
+is greater than 2000.show only categories with revenue greater than 100000 and order by revenue in descending order
+
+ans
+----
+select category,
+sum(units_sold*units_price)as revenue
+from sales
+where unit_price>2000
+group by category
+having revenue>100000
+order by revenue desc;
+
+
+Question 3
+
+Display the average unit price of each region considering only products where units sold
+are greater than or equal to 5.show only regions where the average priece is greater than 5000 and order the results alphabetically
+
+ans
+----
+select region,
+
+
+
+Question 4
+
+Display the count of products in each category considering only products sold in the north and south regions. Show only categories having more then 2 products and sort the count in descending order
+
+Question 5
+Display the total revenue generated in each region considering only products whose unit price is less than 10000'show only regions having revenue greater then 50000 and
+display the results in descending order of revenue
+
+
+SET OPERATORS
+-----------------
+
+1.UNION
+---------
+-->Combines results from two queries and remove duplicate rows.
+columns must have the same number and type
+
+2.UNION ALL
+------------
+-->Combines results from two queries, including duplicate duplicate
+columns must have the same number and type
+
+3.INTERSET
+-----------
+-->Returns rows that are common to both queries
+columns must have same number and type
+
+note: MySQL doesn't support intersect directly
+
+4.MINUS
+--------
+-->Returns rows from the first query that are not present in the second
+query columns must have the same number and type
+
+note: MySQL doesn't support minus directly
+
+
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    course VARCHAR(50)
+);
+
+INSERT INTO Students VALUES
+(101,'Rahul','Java Full Stack'),
+(102,'Priya','Python Full Stack'),
+(103,'Kiran','Data Science'),
+(104,'Sneha','Java Full Stack'),
+(105,'Ajay','Testing');
+
+
+CREATE TABLE Placed_Students (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    company_name VARCHAR(50)
+);
+INSERT INTO Placed_Students VALUES
+(103,'Kiran','TCS'),
+(104,'Sneha','Infosys'),
+(105,'Ajay','Wipro'),
+(106,'Pooja','Accenture'),
+(107,'Ramesh','Capgemini');
+
+
+
+mysql> SELECT*FROM STUDENTS;
++------------+--------------+-------------------+
+| student_id | student_name | course            |
++------------+--------------+-------------------+
+|        101 | Rahul        | Java Full Stack   |
+|        102 | Priya        | Python Full Stack |
+|        103 | Kiran        | Data Science      |
+|        104 | Sneha        | Java Full Stack   |
+|        105 | Ajay         | Testing           |
++------------+--------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT *FROM PLACED_STUDENTS;
++------------+--------------+--------------+
+| student_id | student_name | company_name |
++------------+--------------+--------------+
+|        103 | Kiran        | TCS          |
+|        104 | Sneha        | Infosys      |
+|        105 | Ajay         | Wipro        |
+|        106 | Pooja        | Accenture    |
+|        107 | Ramesh       | Capgemini    |
++------------+--------------+--------------+
+5 rows in set (0.00 sec)
+
+Display all student ids from both tables without duplicates
+
+mysql> SELECT STUDENT_ID
+    -> FROM STUDENTS
+    -> UNION
+    -> SELECT STUDENT_ID
+    -> FROM PLACED_STUDENTS;
++------------+
+| STUDENT_ID |
++------------+
+|        101 |
+|        102 |
+|        103 |
+|        104 |
+|        105 |
+|        106 |
+|        107 |
++------------+
+7 rows in set (0.00 sec)
+
+Display all student ids  from both tables with duplicates
+
+mysql> SELECT STUDENT_ID
+    -> FROM STUDENTS
+    -> UNION ALL
+    -> SELECT STUDENT_ID
+    -> FROM PLACED_STUDENTS;
++------------+
+| STUDENT_ID |
++------------+
+|        101 |
+|        102 |
+|        103 |
+|        104 |
+|        105 |
+|        103 |
+|        104 |
+|        105 |
+|        106 |
+|        107 |
++------------+
+
+
+Display all student ids and names from both tables without duplicates
+
+mysql> SELECT STUDENT_ID,STUDENT_NAME
+    -> FROM STUDENTS
+    -> UNION
+    -> SELECT STUDENT_ID,STUDENT_NAME
+    -> FROM PLACED_STUDENTS;
++------------+--------------+
+| STUDENT_ID | STUDENT_NAME |
++------------+--------------+
+|        101 | Rahul        |
+|        102 | Priya        |
+|        103 | Kiran        |
+|        104 | Sneha        |
+|        105 | Ajay         |
+|        106 | Pooja        |
+|        107 | Ramesh       |
++------------+--------------+
+
+
+Display all student ids and names from both tables with duplicates
+
+ SELECT STUDENT_ID,STUDENT_NAME
+    -> FROM STUDENTS
+    -> UNION ALL
+    -> SELECT STUDENT_ID,STUDENT_NAME
+    -> FROM PLACED_STUDENTS;
++------------+--------------+
+| STUDENT_ID | STUDENT_NAME |
++------------+--------------+
+|        101 | Rahul        |
+|        102 | Priya        |
+
+|        103 | Kiran        |
+|        104 | Sneha        |
+|        105 | Ajay         |
+|        103 | Kiran        |
+|        104 | Sneha        |
+|        105 | Ajay         |
+|        106 | Pooja        |
+|        107 | Ramesh       |
++------------+--------------+
