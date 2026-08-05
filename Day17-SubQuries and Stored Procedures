@@ -1,0 +1,601 @@
+Nested Sub Queries
+===================
+mysql> -- find the cities in country that have the same continent has the country with largest population
+mysql> SELECT C.NAME,C.POPULATION,CO.NAME AS COUNTRYNAME
+    -> FROM CITY C
+    -> JOIN COUNTRY CO ON
+    -> C.COUNTRYCODE=CO.CODE
+    -> WHERE CO.CONTINENT=
+    -> (SELECT CONTINENT FROM COUNTRY WHERE POPULATION=(SELECT MAX(POPULATION)FROM COUNTRY));
++------------------+------------+--------------+
+| NAME             | POPULATION | COUNTRYNAME  |
++------------------+------------+--------------+
+| Dhaka            |   22400000 | Bangladesh   |
+| Chittagong       |    5200000 | Bangladesh   |
+| Beijing          |   21890000 | China        |
+| Shanghai         |   24870000 | China        |
+| Shenzhen         |   17560000 | China        |
+| Jakarta          |   10900000 | Indonesia    |
+| Surabaya         |    2870000 | Indonesia    |
+| New Delhi        |   34700000 | India        |
+| Mumbai           |   21300000 | India        |
+| Bengaluru        |   13600000 | India        |
+| Tokyo            |   37400000 | Japan        |
+| Osaka            |   19100000 | Japan        |
+| Seoul            |    9500000 | South Korea  |
+| Busan            |    3400000 | South Korea  |
+| Islamabad        |    1140000 | Pakistan     |
+| Karachi          |   16800000 | Pakistan     |
+| Lahore           |   13000000 | Pakistan     |
+| Riyadh           |    7680000 | Saudi Arabia |
+| Jeddah           |    4780000 | Saudi Arabia |
+| Bangkok          |   10700000 | Thailand     |
+| Chiang Mai       |    1200000 | Thailand     |
+| Hanoi            |    8400000 | Vietnam      |
+| Ho Chi Minh City |    9300000 | Vietnam      |
++------------------+------------+--------------+
+
+mysql> -- FIND CONTRIES WHERE THE CAPITAL CITY HAS ABOVE AVERAGE-POPULATION FOR THAT COUNTRY
+mysql> SELECT CO.NAME AS COUNTRYNAME,CAP.NAME AS CAPITALNAME,CAP.POPULATION
+    -> FROM COUNTRY CO
+    -> JOIN CITY CAP
+    -> ON CO.CAPITAL=CAP.ID
+    -> WHERE CAP.POPULATION>(SELECT AVG(C.POPULATION)
+    ->                            FROM CITY C
+    ->                           WHERE COUNTRYCODE=CO.CODE);
++----------------+--------------+------------+
+| COUNTRYNAME    | CAPITALNAME  | POPULATION |
++----------------+--------------+------------+
+| Argentina      | Buenos Aires |    3080000 |
+| Belgium        | Brussels     |    1220000 |
+| Bangladesh     | Dhaka        |   22400000 |
+| Chile          | Santiago     |    6270000 |
+| China          | Beijing      |   21890000 |
+| Colombia       | Bogota       |    7970000 |
+| Germany        | Berlin       |    3677000 |
+| Algeria        | Algiers      |    2760000 |
+| Egypt          | Cairo        |   10100000 |
+| Spain          | Madrid       |    3280000 |
+| France         | Paris        |    2140000 |
+| United Kingdom | London       |    8980000 |
+| Greece         | Athens       |     660000 |
+| Indonesia      | Jakarta      |   10900000 |
+| India          | New Delhi    |   34700000 |
+| Italy          | Rome         |    2870000 |
+| Japan          | Tokyo        |   37400000 |
+| Kenya          | Nairobi      |    4400000 |
+| South Korea    | Seoul        |    9500000 |
+| Mexico         | Mexico City  |    9200000 |
+| Netherlands    | Amsterdam    |     905000 |
+| Peru           | Lima         |    9700000 |
+| Poland         | Warsaw       |    1860000 |
+| Portugal       | Lisbon       |     545000 |
+| Saudi Arabia   | Riyadh       |    7680000 |
+| Sweden         | Stockholm    |     980000 |
+| Thailand       | Bangkok      |   10700000 |
+| Venezuela      | Caracas      |    2900000 |
++----------------+--------------+------------+
+
+CORELATION SUB QUERY
+=======================
+mysql> -- FIND CITIES THAT ARE THE LARGEST IN THERE CONTRY
+
+mysql> SELECT C.NAME,C.POPULATION,C.COUNTRYCODE
+    -> FROM CITY C
+    -> WHERE C.POPULATION=
+    -> (SELECT MAX(C2.POPULATION)
+    -> FROM CITY C2
+    -> WHERE C2.COUNTRYCODE=C.COUNTRYCODE);
++------------------+------------+-------------+
+| NAME             | POPULATION | COUNTRYCODE |
++------------------+------------+-------------+
+| Berlin           |    3677000 | DEU         |
+| Paris            |    2140000 | FRA         |
+| London           |    8980000 | GBR         |
+| Rome             |    2870000 | ITA         |
+| Madrid           |    3280000 | ESP         |
+| Warsaw           |    1860000 | POL         |
+| Amsterdam        |     905000 | NLD         |
+| Brussels         |    1220000 | BEL         |
+| Stockholm        |     980000 | SWE         |
+| Lisbon           |     545000 | PRT         |
+| Athens           |     660000 | GRC         |
+| Monaco-Ville     |       1300 | MCO         |
+| Lagos            |   15400000 | NGA         |
+| Cairo            |   10100000 | EGY         |
+| Johannesburg     |    5780000 | ZAF         |
+| Nairobi          |    4400000 | KEN         |
+| Addis Ababa      |    5230000 | ETH         |
+| Kumasi           |    3350000 | GHA         |
+| Casablanca       |    3750000 | MAR         |
+| Algiers          |    2760000 | DZA         |
+| Shanghai         |   24870000 | CHN         |
+| New Delhi        |   34700000 | IND         |
+| Tokyo            |   37400000 | JPN         |
+| Jakarta          |   10900000 | IDN         |
+| Karachi          |   16800000 | PAK         |
+| Dhaka            |   22400000 | BGD         |
+| Ho Chi Minh City |    9300000 | VNM         |
+| Bangkok          |   10700000 | THA         |
+| Seoul            |    9500000 | KOR         |
+| Riyadh           |    7680000 | SAU         |
+| New York         |    8800000 | USA         |
+| Toronto          |    2930000 | CAN         |
+| Mexico City      |    9200000 | MEX         |
+| Sao Paulo        |   12300000 | BRA         |
+| Buenos Aires     |    3080000 | ARG         |
+| Bogota           |    7970000 | COL         |
+| Lima             |    9700000 | PER         |
+| Santiago         |    6270000 | CHL         |
+| Caracas          |    2900000 | VEN         |
+| Sydney           |    5310000 | AUS         |
+| Auckland         |    1700000 | NZL         |
++------------------+------------+-------------+
+
+EXISTS AND NOT-EXISTS
+======================
+mysql> -- FIND THE COUNTRIES THAT HAVE WITH POPULATION OVER 5 MILLION
+mysql> SELECT  C.NAME,C.CONTINENT
+    -> FROM COUNTRY C
+    -> WHERE EXISTS(SELECT 1
+    -> FROM CITY CI
+    -> WHERE CI.COUNTRYCODE=C.CODE
+    -> AND CI.POPULATION>5000000);
++----------------+---------------+
+| NAME           | CONTINENT     |
++----------------+---------------+
+| Australia      | Oceania       |
+| Bangladesh     | Asia          |
+| Brazil         | South America |
+| Chile          | South America |
+| China          | Asia          |
+| Colombia       | South America |
+| Egypt          | Africa        |
+| Ethiopia       | Africa        |
+| United Kingdom | Europe        |
+| Indonesia      | Asia          |
+| India          | Asia          |
+| Japan          | Asia          |
+| South Korea    | Asia          |
+| Mexico         | North America |
+| Nigeria        | Africa        |
+| Pakistan       | Asia          |
+| Peru           | South America |
+| Saudi Arabia   | Asia          |
+| Thailand       | Asia          |
+| United States  | North America |
+| Vietnam        | Asia          |
+| South Africa   | Africa        |
++----------------+---------------+
+
+mysql> -- FIND COUNTRY THAT HAVE ATLEAST 1 CITY
+mysql> SELECT NAME,CONTINENT,POPULATION
+    -> FROM COUNTRY C
+    -> WHERE EXISTS(SELECT 1
+    -> FROM CITY CI
+    -> WHERE CI.COUNTRYCODE=C.CODE);
++----------------+---------------+------------+
+| NAME           | CONTINENT     | POPULATION |
++----------------+---------------+------------+
+| Argentina      | South America |   45800000 |
+| Australia      | Oceania       |   26600000 |
+| Belgium        | Europe        |   11600000 |
+| Bangladesh     | Asia          |  172000000 |
+| Brazil         | South America |  216400000 |
+| Canada         | North America |   38900000 |
+| Chile          | South America |   19600000 |
+| China          | Asia          | 1412000000 |
+| Colombia       | South America |   52200000 |
+| Germany        | Europe        |   83200000 |
+| Algeria        | Africa        |   45400000 |
+| Egypt          | Africa        |  112700000 |
+| Spain          | Europe        |   47400000 |
+| Ethiopia       | Africa        |  126500000 |
+| France         | Europe        |   68000000 |
+| United Kingdom | Europe        |   67300000 |
+| Ghana          | Africa        |   33500000 |
+| Greece         | Europe        |   10400000 |
+| Indonesia      | Asia          |  277500000 |
+| India          | Asia          | 1428000000 |
+| Italy          | Europe        |   59000000 |
+| Japan          | Asia          |  123300000 |
+| Kenya          | Africa        |   55100000 |
+| South Korea    | Asia          |   51700000 |
+| Morocco        | Africa        |   37800000 |
+| Monaco         | Europe        |      39000 |
+| Mexico         | North America |  128900000 |
+| Nigeria        | Africa        |  223800000 |
+| Netherlands    | Europe        |   17700000 |
+| New Zealand    | Oceania       |    5200000 |
+| Pakistan       | Asia          |  240500000 |
+| Peru           | South America |   34400000 |
+| Poland         | Europe        |   37700000 |
+| Portugal       | Europe        |   10300000 |
+| Saudi Arabia   | Asia          |   36900000 |
+| Sweden         | Europe        |   10500000 |
+| Thailand       | Asia          |   71800000 |
+| United States  | North America |  339900000 |
+| Venezuela      | South America |   28300000 |
+| Vietnam        | Asia          |   98900000 |
+| South Africa   | Africa        |   60400000 |
++----------------+---------------+------------+
+
+
+
+mysql> SELECT * FROM EMPLOYEES;
++--------+----------+---------+-------------------+----------+------------+
+| emp_id | emp_name | dept_id | designation       | salary   | join_date  |
++--------+----------+---------+-------------------+----------+------------+
+|      1 | Rahul    |       1 | Software Engineer | 55000.00 | 2021-06-15 |
+|      2 | Anita    |       2 | HR Executive      | 38000.00 | 2020-03-21 |
+|      3 | Suresh   |       4 | Sales Manager     | 52000.00 | 2019-08-10 |
+|      4 | Priya    |       1 | Team Lead         | 65000.00 | 2022-01-05 |
+|      5 | Kiran    |       3 | Finance Analyst   | 48000.00 | 2018-12-11 |
+|      6 | Deepika  |       2 | HR Manager        | 60000.00 | 2019-10-19 |
++--------+----------+---------+-------------------+----------+------------+
+6 rows in set (0.05 sec)
+
+--1st MIN
+mysql> SELECT MIN(SALARY) AS MINIMUM_SALARY FROM EMPLOYEES;
++----------------+
+| MINIMUM_SALARY |
++----------------+
+|       38000.00 |
++----------------+
+
+--1st MAX
+
+mysql> SELECT MAX(SALARY) AS MAXIMUM_SALARY FROM EMPLOYEES;
++----------------+
+| MAXIMUM_SALARY |
++----------------+
+|       65000.00 |
++----------------+
+
+--2nd MIN
+mysql> SELECT MIN(SALARY)AS SECOND_MIN
+    -> FROM EMPLOYEES
+    -> WHERE SALARY>(SELECT MIN(SALARY)
+    -> FROM EMPLOYEES);
++------------+
+| SECOND_MIN |
++------------+
+|   48000.00 |
++------------+
+
+--2nd MAX
+mysql> SELECT MAX(SALARY)AS SECOND_MAX
+    -> FROM EMPLOYEES
+    -> WHERE SALARY<(SELECT MAX(SALARY)
+    -> FROM EMPLOYEES);
++------------+
+| SECOND_MAX |
++------------+
+|   60000.00 |
++------------+
+
+
+--3rd MIN
+mysql> SELECT MIN(SALARY)AS THIRD_MIN
+    -> FROM EMPLOYEES
+    -> WHERE SALARY>(SELECT MIN(SALARY)
+    -> FROM EMPLOYEES
+    -> WHERE SALARY>(SELECT MIN(SALARY)
+    -> FROM EMPLOYEES));
++-----------+
+| THIRD_MIN |
++-----------+
+|  52000.00 |
++-----------+
+
+--3rd MAX
+mysql> SELECT MAX(SALARY)AS THIRD_MAX
+    -> FROM EMPLOYEES
+    -> WHERE SALARY<(SELECT MAX(SALARY)
+    -> FROM EMPLOYEES
+    -> WHERE SALARY<(SELECT MAX(SALARY)
+    -> FROM EMPLOYEES));
++-----------+
+| THIRD_MAX |
++-----------+
+|  55000.00 |
++-----------+
+
+
+mysql> SELECT * FROM EMPLOYEE;
++--------+----------+----------+---------+--------------+------------+
+| emp_id | emp_name | salary   | dept_id | job          | hire_date  |
++--------+----------+----------+---------+--------------+------------+
+|    101 | Amit     | 60000.00 |       2 | Developer    | 2021-06-12 |
+|    102 | Ravi     | 75000.00 |       2 | Manager      | 2020-03-15 |
+|    103 | Sneha    | 55000.00 |       1 | HR Executive | 2022-01-20 |
+|    104 | Priya    | 90000.00 |       3 | Accountant   | 2019-07-10 |
+|    105 | Vikas    | 50000.00 |       4 | Sales Exec   | 2022-05-30 |
+|    106 | Anjali   | 80000.00 |       2 | Developer    | 2021-08-25 |
+|    107 | Manoj    | 95000.00 |       3 | Manager      | 2018-11-05 |
++--------+----------+----------+---------+--------------+------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT * FROM DEPARTMENT;
++---------+-----------+-----------+
+| dept_id | dept_name | location  |
++---------+-----------+-----------+
+|       1 | HR        | Hyderabad |
+|       2 | IT        | Bangalore |
+|       3 | Finance   | Mumbai    |
+|       4 | Marketing | Delhi     |
++---------+-----------+-----------+
+
+
+mysql> -- 2ND MINIMUM SALARY IN DEPARTMENT WISE
+mysql> SELECT D.DEPT_ID,D.DEPT_NAME,
+    -> MIN(E.SALARY) AS SECOND_MIN_SALARY
+    -> FROM EMPLOYEE E
+    -> JOIN DEPARTMENT D
+    -> ON E.DEPT_ID=D.DEPT_ID
+    -> WHERE E.SALARY>(SELECT MIN(SALARY)
+    -> FROM EMPLOYEE E2
+    -> WHERE E2.DEPT_ID=E.DEPT_ID)
+    -> GROUP BY D.DEPT_ID;
++---------+-----------+-------------------+
+| DEPT_ID | DEPT_NAME | SECOND_MIN_SALARY |
++---------+-----------+-------------------+
+|       2 | IT        |          75000.00 |
+|       3 | Finance   |          95000.00 |
++---------+-----------+-------------------+
+
+mysql> -- 2ND MAX
+
+mysql>  SELECT D.DEPT_ID,D.DEPT_NAME,
+    -> MAX(E.SALARY) AS SECOND_MAX_SALARY
+    -> FROM EMPLOYEE E
+    -> JOIN DEPARTMENT D
+    -> ON E.DEPT_ID=D.DEPT_ID
+    -> WHERE E.SALARY<(SELECT MAX(SALARY)
+    -> FROM EMPLOYEE E2
+    -> WHERE E2.DEPT_ID=E.DEPT_ID)
+    -> GROUP BY D.DEPT_ID;
++---------+-----------+-------------------+
+| DEPT_ID | DEPT_NAME | SECOND_MAX_SALARY |
++---------+-----------+-------------------+
+|       2 | IT        |          75000.00 |
+|       3 | Finance   |          90000.00 |
++---------+-----------+-------------------+
+
+
+mysql> -- 3RD MINIMUM SALARY IN DEPARTMENT WISE
+mysql> SELECT D.DEPT_ID,D.DEPT_NAME,
+    -> MIN(E.SALARY) AS SECOND_MIN_SALARY
+    -> FROM EMPLOYEE E
+    -> JOIN DEPARTMENT D
+    -> ON E.DEPT_ID=D.DEPT_ID
+    -> WHERE E.SALARY>(SELECT MIN(SALARY)
+    -> FROM EMPLOYEE E2
+    -> WHERE E2.DEPT_ID=E.DEPT_ID
+    -> AND E2.SALARY>(
+    -> SELECT MIN(SALARY)
+    -> FROM EMPLOYEE E3
+    -> WHERE E3.DEPT_ID=E2.DEPT_ID
+    -> )
+    -> )
+    -> GROUP BY D.DEPT_ID;
++---------+-----------+-------------------+
+| DEPT_ID | DEPT_NAME | SECOND_MIN_SALARY |
++---------+-----------+-------------------+
+|       2 | IT        |          80000.00 |
++---------+-----------+-------------------+
+
+mysql> -- 3RD MAXIMUM SALARY IN DEPARTMENT WISE
+mysql> SELECT D.DEPT_ID,D.DEPT_NAME,
+    -> MAX(E.SALARY) AS SECOND_MAX_SALARY
+    -> FROM EMPLOYEE E
+    -> JOIN DEPARTMENT D
+    -> ON E.DEPT_ID=D.DEPT_ID
+    -> WHERE E.SALARY<(SELECT MAX(SALARY)
+    -> FROM EMPLOYEE E2
+    -> WHERE E2.DEPT_ID=E.DEPT_ID
+    -> AND E2.SALARY<(
+    -> SELECT MAX(SALARY)
+    -> FROM EMPLOYEE E3
+    -> WHERE E3.DEPT_ID=E2.DEPT_ID
+    -> )
+    -> )
+    -> GROUP BY D.DEPT_ID;
++---------+-----------+-------------------+
+| DEPT_ID | DEPT_NAME | SECOND_MAX_SALARY |
++---------+-----------+-------------------+
+|       2 | IT        |          60000.00 |
++---------+-----------+-------------------+
+
+
+Stored Procedures
+==================
+-- A stored procedures is a named, precompiled collection of one or more SQL statements
+that are stored inside the database and can be executed(called) whenever required.
+Instead of sending a long block of SQL from an application every time, the application
+simply calls the procedure by name
+
+-- Stored Procedures behave likes functions or subroutines in programming language 
+they can accept parameters, perform logic(loops, conditions, variables declarations)
+and return results
+
+
+Why use stored procedures?
+---------------------------
+1.Performance:-precompiled and cached by the database engine ,so repeated execution 
+is faster then sending raw SQL each time
+2.Reusability:-write the logic once,call it from many applications or scripts
+3.Security:-User can be granteed execute permission on a procedure without granting 
+direct access to the underlying tables
+4.Reduced network traffic:- A single CALL statement replaces may lines of SQL sent over the network
+5.Maintainability:- Business logic is centralized in the database , so changes are made in
+one palce
+6.Consistency:-Ensures the same validation/business rules are applied every time ,regradless of which application calls it
+
+Advantages
+-----------
+*Faster ececution after complilation
+*Reduce duplicate SQL
+*Supports transactions,loops,conditions,variables,cursors and exception handlers
+*Easy maintenance
+
+Disadvantges
+--------------
+*Debugging can be difficult
+*Vendor-specific syntax
+*Complex procedyres may become hard to maintain 
+
+Create Procedure
+-----------------
+syntax:
+
+DELIMITER//
+
+CREATE PROCEDURE PROCEDURE_NAME(
+[IN|OUT|INOUT] PARAMETER-NAME DATA-TYE....)
+BEGIN                                     
+---- SQL Statements/logic
+------Declarations,conditions,loops...etc
+END//
+
+
+DELIMITER;
+CALL PROCEDURE_NAME();
+QUERIES
+-------
+mysql> CREATE TABLE Employees (
+    ->     emp_id INT PRIMARY KEY,
+    ->     emp_name VARCHAR(50),
+    ->     department VARCHAR(30),
+    ->     salary DECIMAL(10,2),
+    ->     experience INT,
+    ->     city VARCHAR(30)
+    -> );
+
+mysql> INSERT INTO Employees VALUES
+    -> (101,'Rahul','IT',65000,5,'Hyderabad'),
+    -> (102,'Priya','HR',45000,3,'Chennai'),
+    -> (103,'Amit','Finance',70000,6,'Bangalore'),
+    -> (104,'Sneha','IT',80000,8,'Hyderabad'),
+    -> (105,'Kiran','Sales',40000,2,'Pune'),
+    -> (106,'Ravi','HR',50000,4,'Mumbai'),
+    -> (107,'Anjali','IT',90000,10,'Delhi'),
+    -> (108,'Suresh','Finance',55000,5,'Chennai'),
+    -> (109,'Divya','Sales',48000,3,'Hyderabad'),
+    -> (110,'Vikram','IT',75000,7,'Bangalore');
+
+mysql> SELECT*FROM EMPLOYEES;
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE GETALLEMPLOYEES()
+    -> BEGIN
+    ->      SELECT * FROM EMPLOYEES;
+    -> END //
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> DELIMITER ;
+mysql> CALL GETALLEMPLOYEES();
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+10 rows in set (0.05 sec)
+
+mysql> SHOW PROCEDURE STATUS
+    -> WHERE DB='PSF4';
++------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db   | Name            | Type      | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| psf4 | GETALLEMPLOYEES | PROCEDURE | root@localhost | 2026-08-04 10:55:13 | 2026-08-04 10:55:13 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE GETITEMPLOYEE()
+    -> BEGIN
+    ->    SELECT*FROM EMPLOYEES
+    -> WHERE DEPARTMENT='IT';
+    -> END //
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER ;
+mysql> CALL GETITEMPLOYEE();
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+
+mysql> CREATE PROCEDURE GETITEMPLOYE()
+    -> BEGIN
+    ->    SELECT EMP_NAME
+    -> FROM EMPLOYEES;
+    -> END //
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER ;
+mysql> CALL GETITEMPLOYE();
++----------+
+| EMP_NAME |
++----------+
+| Rahul    |
+| Priya    |
+| Amit     |
+| Sneha    |
+| Kiran    |
+| Ravi     |
+| Anjali   |
+| Suresh   |
+| Divya    |
+| Vikram   |
++----------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
