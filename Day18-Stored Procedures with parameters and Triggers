@@ -1,0 +1,263 @@
+Stored Procedures with parameters
+----------------------------------
+--IN PARAMETER
+-->find employees by employee id
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE getEmployeeById(IN eid INT)
+    -> BEGIN
+    -> SELECT *FROM EMPLOYEES
+    -> WHERE EMP_ID=EID;
+    -> END //
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> DELIMITER ;
+mysql> CALL getEmployeeById(101);
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
++--------+----------+------------+----------+------------+-----------+
+
+-->Find the employees by department
+
+mysql> CREATE PROCEDURE getEmployeeByDept(IN dept VARCHAR(30))
+    -> BEGIN
+    -> SELECT*FROM EMPLOYEES
+    -> WHERE DEPARTMENT=DEPT;
+    -> END //
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> DELIMITER ;
+mysql> CALL getEmployeeByDept('IT');
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE salaryRange(IN minsal DECIMAL(10,2),IN maxsal DECIMAL(10,2))
+    -> BEGIN
+    -> SELECT *FROM EMPLOYEES
+    -> WHERE SALARY BETWEEN MINSAL AND MAXSAL;
+    -> END //
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER ;
+mysql> CALL salaryRange(40000,70000);
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
++--------+----------+------------+----------+------------+-----------+
+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE deptExp(IN dept VARCHAR(30),IN exp INT)
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES
+    -> WHERE DEPARTMENT='IT' AND EXPERIENCE>5;
+    -> END //
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER ;
+mysql> CALL deptExp('IT',5);
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE deptEx(IN dept VARCHAR(30),IN exp INT)
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES
+    -> WHERE DEPARTMENT=DEPT AND EXPERIENCE>5;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> CALL deptExp('IT',5);
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+
+
+mysql> -- OUT PARAMETER
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE totalEmployees(OUT total INT)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL
+    -> FROM EMPLOYEES;
+    -> END //
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER ;
+mysql> CALL totalEmployees(@TOTAL)
+    -> ;
+Query OK, 1 row affected (0.05 sec)
+
+mysql> SELECT @TOTAL;
++--------+
+| @TOTAL |
++--------+
+|     10 |
++--------+
+
+mysql> -- ONLY IT EMPLOYEES COUNT
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE itEmployees(OUT itEmp int)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO ITEMP
+    -> FROM EMPLOYEES
+    -> WHERE DEPARTMENT='IT';
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> CALL itEmployees(@itemp);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT @ITEMP;
++--------+
+| @ITEMP |
++--------+
+|      4 |
++--------+
+
+--- IN AND OUT PARAMETERS
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE addBonus(IN empid INT,
+    ->                                   OUT bonus DECIMAL(10,2))
+    -> BEGIN
+    -> UPDATE EMPLOYEES
+    -> SET SALARY=SALARY+BONUS
+    -> WHERE EMP_ID=EMPID;
+    -> SELECT SALARY
+    -> INTO BONUS
+    -> FROM EMPLOYEES
+    -> WHERE EMP_ID=EMPID;
+    -> END //
+
+mysql> DELIMITER ;
+mysql> SET @B=5000;
+mysql> CALL addBonus(101,@B);
+mysql> SELECT @B;
+
+
+
+
+
+Introduction to Triggers
+==========================
+-->A Trigger is a special type stored program that automatically executes in a response 
+to a specific event INSERT,UPDATE,OR DELETE
+-->Occurring on a specified table. Unlike a stored procedure 
+ A trigger is never called directly. The database engine invokes it automatically when 
+the trigger event happens
+
+Syntax
+=======
+
+DELIMITER //
+CREATE TRIGGER trigger_name
+{BEFORE | AFTER}{INSERT|DELETE|UPDATE}
+ON TABLE_NAME
+FOR EACH ROW
+BEGIN
+   ---trigger logic
+   ---use NEW.column_name for inserted/updated values
+   ---use OLD.column_name for deleted /previous values
+END //
+
+DELIMITER ; 
+
+EXAMPLE
+---------
+mysql> DELIMITER //
+mysql> CREATE TRIGGER trg_before_insert_salary
+    -> BEFORE INSERT
+    -> ON EMPLOYEES
+    -> FOR EACH ROW
+    -> BEGIN
+    -> IF NEW.SALARY<20000 THEN
+    -> SIGNAL SQLSTATE '45000'
+    -> SET MESSAGE_TEXT='SALARY CANNOT BE LESS THAN 20000';
+    -> END IF;
+    -> END //
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> DELIMITER ;
+mysql> INSERT INTO EMPLOYEES VALUES(106,'ARJUN','IT',15000,3,'DELHI');
+ERROR 1644 (45000): SALARY CANNOT BE LESS THAN 20000
+mysql> INSERT INTO EMPLOYEES VALUES(106,'ARJUN','IT',55000,3,'DELHI');
+Query OK, 1 row affected (0.05 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
